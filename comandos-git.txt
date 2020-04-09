@@ -1,0 +1,240 @@
+	Comandos git
+
+	Versión de Git
+	git --version
+
+	Configurar correo
+	git config --global user.email parralinaresluis@gmail.com
+
+	Configurar nombre
+	git config --global user.name "Luis Parra"
+
+	git config --global color.ui true
+
+	Comprobando configuración
+	git config --list
+
+	Comandos vim
+
+	Guardar y salir
+	Presionar escape
+	:wq
+	Salir
+	q
+	Salir forzoso
+	q!
+
+	Inicializa el repositorio en la carpeta
+	git init <nombrecarpeta>
+
+	Borrar repositorio solo borrar carpeta .git
+	rm -rf .git
+
+	Ver archivos en el Working Directory 
+	git status
+
+	Agregar a staging
+	git add archivo
+
+	Para sacar del stage
+	git rm --cached <archivo>
+
+	Agrega todos los archivos del working directory a stage
+	git add -A
+	git add .
+
+	Quitar los archivos del staging y borrarlos
+	git rm -f <archivo>
+
+	NO hace nada, confirma si un archivo existe en el staging
+	git add -n <archivo>
+
+	Comprometer cambios o hacer commit
+	git commit - m "Agregar index"
+
+	Corregir commit cuando se olvidó algo
+	git commit --amend
+
+	Ver historial de commits
+	git log
+
+	Tags
+	Tag anotado
+	Agregar etiquetas a los commit
+	git tag -a 0.5 -m 'Versión estable'
+
+	Para listar los tag hechos
+	git tag -l
+
+	También se puede agregar tags a commits anteriores 
+	para eso se necesita saber el hash del commit
+
+	Tag ligero
+	git tag -a 0.3 c303fc965f42d6d68ecc5b7995d4e99ac110362b
+
+	Muestra las etiquetas
+	git tag -l
+
+	Borar etiqueta
+	git tag -d <tag-name>
+
+	renombrar etiqueta
+	git tag -f -a <etiqueta> -m <mensaje> <sha1>
+
+	Revisando el log
+	git log
+
+	Un log más resumido
+	git log --oneline
+
+	Muestra de forma gráfica (ramas y mezclas)
+	git log --oneline --graph
+
+	Muestras commits específicos
+	git log -<numero>
+
+	Lista los tags, el tamaño que ocupa cada registro, los parentesco de 
+	los registros y los despliega en el orden de commit: del último al primero
+	git log --decorate=short --reverse --log-size --parents
+
+	Versión personalizada del log
+	git config --global alias.superlog "log --graph --abbrev-commit --date=relative --format=format:'%C(yellow)%h - %C(bold cyan)(%ar) %C(red)%s - %C(bold blue)%an %C(bold yellow)%d' --all"
+
+	Estadísticas de cada confirmación
+	git log --stat
+
+	ver diferencias entre estado actual y el commit colocado
+	git diff <sha1 commit1> <sha1 commit 2>
+
+	Desde que commit quiero quitar los cambios
+	No quita los archivos, los deja ahí preparados 
+	para hacer commit (el cambio se mantiene en stage)
+	git reset --soft
+
+	Desarta cambios pero no los deja en staging, los deja 
+	en el working directory
+	git reset --mixed
+
+	Remueve el archivo de staging a working directory
+	(resetea cambios)
+	git reset HEAD <archivo>
+
+	Elimina definitivamente archivos que están en staging
+	No elimina los archivos que esten en working directory
+	git reset --hard
+
+	#Ramas
+	Crear rama
+	git branch <nombre>
+
+	Listar ramas
+	git branch -l
+
+	Borrar rama
+	git branch -d <nombre>
+	git branch -D <nombre> (borrado forzado)
+
+	Renombrar rama
+	git branch -m <nombre_antes> <nombre_nuevo>
+
+	Movernos entre ramas
+	git checkout <nombre_rama>
+
+	Se mueve en el tiempo, pero no se modifica nada
+	git checkout <commit_f530c74>
+
+	Crear ramas y navegar al mismo tiempo
+	git checkout -b <nombre_rama>
+
+	#Mezclar ramas
+	Me ubico en la rama que quiero que obtenga los cambios
+	git merge <rama_a_mezclar>
+
+	Fast-forward:
+	Estrategia cuando la rama mezclada provenia 
+	de la rama master
+
+	Recursive:
+	Mezcla a partir de dos ramas derivadas de la rama master 
+	donde al mezclar los cambios no se vieron afectados los archivos
+
+	Conflict:
+	Se producen cambios en las mismas líneas de las dos ramas
+
+	Rebase
+	Recomendación NO usar rebase con repositorios online
+	git rebase <rama_a_rebasar>
+
+	git rebase -i <rama_a_rebasar> (modo interactivo)
+
+	#Stash (estado intermedio)
+	git stash (Guarda los cambios temporalmente para poder
+	moverse a otra rama)
+
+	Ver los stash hechos en la rama
+	git stash list 
+
+	git stash drop <stash@{index}>
+	El índice 0 es el cambio más reciente stageado
+	El último índice es el primer stash hecho
+
+	Aplicar el stash al repositorio para seguir trabajando
+	git stash apply <stash@{index}>
+
+	Colocar mensaje al stash
+	git stash save "mensaje descriptivo del stash"
+
+	git checkout -b <nueva_rama>
+	git cherry-pick <sha1 commit a copiar a esta rama>
+
+	git checkout -- <file>..." to discard changes in working directory"
+
+	Clonando repositorios
+	git clone <url.git>
+
+	Repositorio remoto
+	Para agregar un repositorio remoto
+	git remote add <origin> <url.git>
+
+	Listar repositorios remotos
+	git remote -v
+
+	Borrar
+	git remote remove <origin>
+
+	Traer archivos del repositorio remoto
+	git fetch origin master
+	 * branch            master     -> FETCH_HEAD
+	 * [new branch]      master     -> origin/master
+
+	Ahora se mezcla la rama remota con la local
+	git merge origin/master
+	* fatal: refusing to merge unrelated histories
+
+	Se usa la bandera 
+	git merge origin/master --allow-unrelated-histories
+
+	Trae los archivos y los mezcla de una vez
+	git pull origin master
+
+	Enviar cambios a remoto
+	git push <repo_remoto> <rama_remota>
+	Ejemplo:
+	git push origin master
+	git push origin responsive
+
+	Agrega tags
+	git push origin master --tags
+
+	Ignorando archivos
+	Se crea archivo .gitignore
+
+	Pull request
+	Colocar en revisión el código por parte de otros miembros 
+	del equipo
+
+	En local se crea una rama y se hace git push origin <rama>
+
+	issue_template.md			= asi se nombra el template de inssue para github
+	pull_request_template.md		= asi se nombra el template de pull requests para github
+
